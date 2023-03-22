@@ -1,0 +1,29 @@
+<?php
+// check if form submitted and file URL is provided
+if (isset($_POST['url'])) {
+    $url = $_POST['url'];
+    $filename = basename($url); // get filename from URL
+
+    // open file for writing
+    $file = fopen($filename, 'w');
+
+    // download remote file and save locally
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_FILE, $file);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_exec($ch);
+    curl_close($ch);
+
+    // close file handle
+    fclose($file);
+
+    echo "File downloaded and saved as $filename";
+}
+?>
+
+<!-- HTML form for user input -->
+<form method="post" action="">
+    <label for="url">File URL:</label>
+    <input type="text" name="url" id="url" />
+    <button type="submit">Download</button>
+</form>
